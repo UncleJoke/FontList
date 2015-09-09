@@ -14,11 +14,29 @@
 
 @implementation ViewController
 
+//获取Document目录
++ (NSString *)getDocumentPath
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    return ([paths count] > 0 ? [paths objectAtIndex:0] : @"undefined");
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.title = @"字体库";
-	
+    
+    NSMutableArray *array = @[].mutableCopy;
+    for (NSString *familyName in [UIFont familyNames]) {
+        
+        NSArray * fonts = [UIFont fontNamesForFamilyName:familyName];
+                           
+        for (NSString *fontName in fonts) {
+            [array addObject:fontName];
+        }
+    }
+	[array writeToFile:[NSString stringWithFormat:@"%@/xxx.plist",[self.class getDocumentPath]] atomically:YES];
+    NSLog(@"%@",[self.class getDocumentPath]);
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
